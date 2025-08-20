@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import com.jspiders.user_app.repository.UserRepository;
@@ -56,9 +58,23 @@ public class UserDao {
 	}
 	
 	public String deleteAll() {
-		
 			userRepository.deleteAll();
 			return "All id deleted successfully";
-		
 	}
+	
+	public Page<User> getUserByPage(int pageNo) {
+		PageRequest pageRequest = PageRequest.of(pageNo, 10);
+		Page<User> page2 = userRepository.findAll(pageRequest);
+		return page2;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }

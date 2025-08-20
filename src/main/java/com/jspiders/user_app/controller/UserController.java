@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jspiders.user_app.entity.User;
+import com.jspiders.user_app.response.ResponseStructure;
 import com.jspiders.user_app.service.UserService;
 
 @RestController
@@ -25,9 +29,9 @@ public class UserController {
 	private UserService userService; 
 	
 	@PostMapping("/register")
-	public User registerUser(@RequestBody User user) {
-		User user2 = userService.registerUser(user);
-		return user2;
+	public ResponseEntity<?> registerUser(@RequestBody User user) {
+		ResponseStructure<User> structure = userService.registerUser(user);
+		return new ResponseEntity<>(structure, HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/getUser") // GetMapping does not supports body. Get Mapping gives Request Header and Request line.
@@ -58,4 +62,12 @@ public class UserController {
 		String message = userService.deleteAll();
 		return message;
 	}
+
+	@GetMapping("/getUserByPage ") 
+	public Page<User> getUserByPage(int pageNo) {
+		return userService.getUserByPage(pageNo);	
+	}
+	
+	
+	
 }
