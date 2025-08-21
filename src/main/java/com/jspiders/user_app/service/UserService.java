@@ -15,7 +15,7 @@ import com.jspiders.user_app.response.ResponseStructure;
 
 @Service
 public class UserService {
-
+	
 	@Autowired
 	private UserDao userDao;
 
@@ -24,39 +24,71 @@ public class UserService {
 		ResponseStructure<User> structure = new ResponseStructure<User>();
 		structure.setData(user2);
 		structure.setTimeStamp(LocalDateTime.now());
-		structure.setMessage("User Record created");
-		structure.setStatusCode(201);
+		structure.setMessage("User Record created successfully");
+		structure.setStatusCode(200);
+		return structure;
+		
+	}
+
+	public ResponseStructure<Optional<User>> getId(@RequestParam int userId) {
+		Optional<User> optional = userDao.getId(userId);
+		if(optional.isPresent()) {
+			ResponseStructure<Optional<User>> structure = new ResponseStructure<Optional<User>>();
+			structure.setData(optional);
+			structure.setTimeStamp(LocalDateTime.now());
+			structure.setMessage("User Record found successfully");
+			structure.setStatusCode(200);
+			return structure;
+		}
+		else {
+			throw new IllegalArgumentException("Invalid Id");
+		}
+		
+	}
+	
+	public ResponseStructure<List<User>> getAllUser() {
+		List<User> optional = userDao.getAllUser();
+		ResponseStructure<List<User>> structure = new ResponseStructure<List<User>>();
+		structure.setData(optional);
+		structure.setTimeStamp(LocalDateTime.now());
+		structure.setMessage("User Record found successfully");
+		structure.setStatusCode(200);
+		return structure;
+		
+	}
+
+	public ResponseStructure<User> updateUser(User user, int id) {
+		User user2 = userDao.updateUser(user, id);
+		ResponseStructure<User> structure = new ResponseStructure<User>();
+		structure.setData(user2);
+		structure.setTimeStamp(LocalDateTime.now());
+		structure.setMessage("User Record updated successfully");
+		structure.setStatusCode(200);
 		return structure;
 	}
 
-	public Optional<User> getId(@RequestParam int userId) {
-		Optional<User> optional = userDao.getId(userId);
-		return optional;
-	}
-
-	public List<User> getAllUser() {
-		List<User> optional = userDao.getAllUser();
-		return optional;
-	}
-
-	public User updateUser(User user, int userId) {
-		User user2 = userDao.updateUser(user, userId);
-		return user2;
-	}
-
-	public String deleteUser(int userId) {
-		String message = userDao.deleteUser(userId);
-		return message;
+	public ResponseStructure<String> deleteUser(int id) {
+		String message = userDao.deleteUser(id);
+		ResponseStructure<String> structure = new ResponseStructure<String>();
+		structure.setData(message);
+		structure.setTimeStamp(LocalDateTime.now());
+		structure.setMessage("User Record deleted successfully");
+		structure.setStatusCode(200);
+		return structure;
 	}
 
 	public String deleteAll() {
 		String message = userDao.deleteAll();
 		return message;
 	}
-
-	public Page<User> getUserByPage(int pageNo) {
+	
+	public ResponseStructure<Page<User>> getUserByPage(int pageNo) {
 		Page<User> page = userDao.getUserByPage(pageNo);
-		return page;
+		ResponseStructure<Page<User>> structure = new ResponseStructure<Page<User>>();
+		structure.setData(page);
+		structure.setTimeStamp(LocalDateTime.now());
+		structure.setMessage("User Record Found successfully");
+		structure.setStatusCode(200);
+		return structure;
 	}
-
 }

@@ -19,55 +19,53 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jspiders.user_app.entity.User;
 import com.jspiders.user_app.response.ResponseStructure;
 import com.jspiders.user_app.service.UserService;
-
 @RestController
 @RequestMapping("/user")
 public class UserController {
-
-
+	
 	@Autowired
 	private UserService userService; 
 	
-	@PostMapping("/register")
+	@PostMapping("/register") // ? : Predictor
 	public ResponseEntity<?> registerUser(@RequestBody User user) {
 		ResponseStructure<User> structure = userService.registerUser(user);
-		return new ResponseEntity<>(structure, HttpStatus.CREATED);
+
+		return new ResponseEntity<>(structure , HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/getUser") // GetMapping does not supports body. Get Mapping gives Request Header and Request line.
-	public Optional<User> getId(@RequestParam int userId) {
-		Optional<User> optional = userService.getId(userId);
+	public ResponseStructure<Optional<User>> getId(@RequestParam int userId) {
+		ResponseStructure<Optional<User>> optional = userService.getId(userId);
 		return optional;
 	}
 	
-	@GetMapping("/getAllUser")
-	public List<User> getAllUser(){
-		return userService.getAllUser();
+	@GetMapping("/getAll")
+	public ResponseStructure<List<User>> getAllUser() {
+		ResponseStructure<List<User>> optional = userService.getAllUser();
+		return optional;		
 	}
 	
-	@PutMapping("/update")//localhost:8080/user/update?userId=id
-	public User updateUser(@RequestBody User user, @RequestParam int userId){
-		User user2 = userService.updateUser(user, userId);
+	@PutMapping("/update")
+	public ResponseStructure<User> updateUser(@RequestBody User user,@RequestParam int id ) {
+		ResponseStructure<User> user2 = userService.updateUser(user, id);
 		return user2;
 	}
 	
-	@DeleteMapping("/delete")//localhost:8080/user/update?userId=id
-	public String deleteUser(@RequestParam int userId){
-		String message = userService.deleteUser(userId);
+	@DeleteMapping("/delete")
+	public ResponseStructure<String> deleteUser(@RequestParam int id ) {
+		ResponseStructure<String> message = userService.deleteUser(id);
 		return message;
 	}
 	
-	@DeleteMapping("/deleteAll")//localhost:8080/user/update?userId=id
-	public String deleteAll(){
+	@DeleteMapping("/deleteAll")
+	public String deleteAll() {
 		String message = userService.deleteAll();
 		return message;
 	}
-
-	@GetMapping("/getUserByPage ") 
-	public Page<User> getUserByPage(int pageNo) {
-		return userService.getUserByPage(pageNo);	
+	@GetMapping("getUserPage")
+	public ResponseStructure<Page<User>> getUserByPage(@RequestParam int pageNo) {
+		return userService.getUserByPage(pageNo);
 	}
 	
-	
-	
+
 }
