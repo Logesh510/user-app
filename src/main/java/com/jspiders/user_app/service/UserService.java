@@ -91,4 +91,24 @@ public class UserService {
 		structure.setStatusCode(200);
 		return structure;
 	}
+	
+	
+
+	public ResponseStructure<Optional<User>> login(String email, String password) {
+		Optional<User> optional = userDao.login(email);
+		if(optional.isPresent()) {
+			String userEmail = optional.get().getUserEmail(); //db email
+			String userPassword = optional.get().getUserPassword(); //db pass
+			if(password.equals(userPassword)) {
+				ResponseStructure<Optional<User>> structure = new ResponseStructure<Optional<User>>();
+				structure.setData(optional);
+				structure.setTimeStamp(LocalDateTime.now());
+				structure.setMessage("login success! welcome");
+				structure.setStatusCode(200);
+				return structure;
+			}
+		}
+		throw new IllegalArgumentException("Invalid credentials");
+	}
+	
 }

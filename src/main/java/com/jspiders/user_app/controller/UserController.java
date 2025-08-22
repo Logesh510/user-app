@@ -39,7 +39,7 @@ public class UserController {
 		return optional;
 	}
 	
-	@GetMapping("/getAll")
+	@GetMapping("/getAllUser")
 	public ResponseStructure<List<User>> getAllUser() {
 		ResponseStructure<List<User>> optional = userService.getAllUser();
 		return optional;		
@@ -62,10 +62,19 @@ public class UserController {
 		String message = userService.deleteAll();
 		return message;
 	}
-	@GetMapping("getUserPage")
+	@GetMapping("/getUserPage")
 	public ResponseStructure<Page<User>> getUserByPage(@RequestParam int pageNo) {
 		return userService.getUserByPage(pageNo);
 	}
 	
-
+	@GetMapping("/login") //(localhost:8080/user/login?email=""password="")
+	public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password) {
+		ResponseStructure<Optional<User>> login = userService.login(email, password);
+		return new ResponseEntity<>(login, HttpStatus.OK);
+	}
+	@PostMapping("/login")
+		public ResponseEntity<?> login(@RequestBody User user){
+		ResponseStructure<Optional<User>> login = userService.login(user.getUserEmail(), user.getUserPassword());
+		return new ResponseEntity<>(login, HttpStatus.ACCEPTED);
+	}
 }

@@ -69,7 +69,9 @@ public class UserDao {
 	}
 	
 	
-	
+	public Optional<User> login(String email) {
+		return userRepository.findByUserEmail(email);
+	}
 	
 	
 	
