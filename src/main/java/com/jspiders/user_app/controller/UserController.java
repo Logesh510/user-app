@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jspiders.user_app.entity.User;
 import com.jspiders.user_app.response.ResponseStructure;
 import com.jspiders.user_app.service.UserService;
+
+import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -27,7 +29,7 @@ public class UserController {
 	private UserService userService; 
 	
 	@PostMapping("/register") // ? : Predictor
-	public ResponseEntity<?> registerUser(@RequestBody User user) {
+	public ResponseEntity<?> registerUser(@Valid @RequestBody User user) {
 		ResponseStructure<User> structure = userService.registerUser(user);
 
 		return new ResponseEntity<>(structure , HttpStatus.CREATED);
